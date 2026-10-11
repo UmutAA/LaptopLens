@@ -123,7 +123,7 @@ def parse_product_details(item_links):
 
     if items:
         df = pd.DataFrame(items)
-        df.to_csv('products.csv', index=False, encoding='utf-8-sig')
+        df.to_csv('../data/products_raw.csv', index=False, encoding='utf-8-sig')
         print("Process completed! Datas have been saved to 'products.csv' file")
     else:
         print('\nNo products found')
