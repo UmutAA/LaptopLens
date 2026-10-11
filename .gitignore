@@ -63,5 +63,4 @@ Thumbs.db
 # Project specific data outputs (trained model weights, checkpoints, logs)
 *.pkl
 *.joblib
-data/
 output/
