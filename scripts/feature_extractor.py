@@ -98,7 +98,7 @@ def main():
     except FileNotFoundError:
         print(f"'{input_file}' not found! Run first 'scrape.py'.")
         return
-    START_INDEX = 1046
+    START_INDEX = 0
     END_INDEX = df.shape[0]
     BATCH_SIZE = 20
 
