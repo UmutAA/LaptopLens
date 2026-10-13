@@ -64,3 +64,6 @@ Thumbs.db
 *.pkl
 *.joblib
 output/
+
+# HTML files
+.html
