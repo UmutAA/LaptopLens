@@ -1,18 +1,24 @@
 import requests
 from bs4 import BeautifulSoup
 import time
+import random
 import pandas as pd
+import os
 
 HEADERS = {
     'User-Agent': (
         'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,'
         ' like Gecko) Chrome/122.0.0.0 Safari/537.36'
     ),
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
     'Accept-Language': 'tr-TR,tr;q=0.9,en-US;q=0.8,en;q=0.7',
+    'Referer': 'https://www.idefix.com/',
+    'Connection': 'keep-alive',
 }
 
 def save_html(html, path):
     try:
+        os.makedirs(os.path.dirname(path), exist_ok=True)
         with open(path, 'w', encoding="utf-8") as f:
             f.write(html)
 
@@ -44,9 +50,9 @@ def open_html(path):
     except Exception as e:
         print(e)
 
-def get_html_pages(base_url, path_prefix, pages=3, page_indicator='page'):
+def get_html_pages(base_url, path_prefix, start_page=1, end_page=3, page_indicator='page'):
   """Loops for pages times and saves each one to a different file"""
-  for page in range(1, pages + 1):
+  for page in range(start_page, end_page + 1):
     url = base_url + f'?{page_indicator}={page}'
     print('Attempting to open ' + url)
     response = requests.get(url, headers=HEADERS)
@@ -61,12 +67,12 @@ def get_html_pages(base_url, path_prefix, pages=3, page_indicator='page'):
     save_html(response.text, file_path)
     time.sleep(0.5)
 
-def parse_all_pages(path_prefix, pages):
+def parse_all_pages(path_prefix, start_page=1, end_page=3):
   all_item_links = []
 
-  for page in range(1, pages + 1):
+  for page in range(start_page, end_page + 1):
     file_path = f'{path_prefix}_{page}.html'
-    print(f'\n{file_path} okunuyor...')
+    print(f'\nReading {file_path}')
     html = open_html(file_path)
 
     if not html:
@@ -93,49 +99,17 @@ def parse_all_pages(path_prefix, pages):
   print(f'\nTotal {len(all_item_links)} links found across all pages.')
   return all_item_links
 
-def parse_product_details(item_links):
-    items = []
-    print('\nParsing product page...')
-    for index, link in enumerate(item_links, 1):
-        print(f'{index}. Link: {link}')
-        detail_resp = requests.get(link, headers=HEADERS)
-        if detail_resp.status_code == 200:
-            detail_soup = BeautifulSoup(detail_resp.text, 'html.parser')
-
-            try:
-                h1 = detail_soup.find('h1', class_='text-title-lg text-neutral-600')
-                item_name = h1.get_text(strip=True)
-                item_price = 0
-                price_tag = detail_soup.find('span', class_='text-title-md text-neutral-500')
-                if price_tag:
-                    item_price = price_tag.get_text(separator=' ', strip=True)
-                item_price = item_price.replace(' TL', '')
-                item_price = item_price.replace('.', '')
-                item_price = item_price.replace(',', '.')
-                item_price = float(item_price)
-
-                items.append({"Link": link, "Name": item_name, "Price": item_price})
-
-            except AttributeError:
-                print("Could not resolve elements")
-
-        time.sleep(0.5)
-
-    if items:
-        df = pd.DataFrame(items)
-        df.to_csv('../data/products_raw.csv', index=False, encoding='utf-8-sig')
-        print("Process completed! Datas have been saved to 'products.csv' file")
-    else:
-        print('\nNo products found')
 
 
 url = 'https://www.idefix.com/gaming-notebook-laptop-c-230881904'
 html_path = '../categories/categories'
-total_pages = 1
 
-get_html_pages(url, html_path, pages=total_pages, page_indicator='sayfa')
+START_PAGE = 13
+END_PAGE = 13
 
-all_links = parse_all_pages(html_path, pages=total_pages)
+get_html_pages(url, html_path, start_page=START_PAGE, end_page=END_PAGE, page_indicator='sayfa')
+
+all_links = parse_all_pages(html_path, start_page=START_PAGE, end_page=END_PAGE)
 
 if all_links:
   parse_product_details(all_links)
