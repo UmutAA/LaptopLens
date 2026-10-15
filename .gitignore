@@ -66,4 +66,4 @@ Thumbs.db
 output/
 
 # HTML files
-.html
+*.html
