@@ -65,7 +65,6 @@ def extract_features_batch(product_names: list[str], client: genai.Client, model
         Product Names: {formatted_products}
         """
     try:
-
         interaction = client.interactions.create(
             model=model_name,
             system_instruction="You are a precise data extraction assistant. Output only raw JSON.",
@@ -79,11 +78,9 @@ def extract_features_batch(product_names: list[str], client: genai.Client, model
 
         return json.loads(raw_text.strip())
 
-
     except Exception as e:
         print(f"GenAI Error for '{product_names}': {e}")
         return None
-
 
 def main():
     load_dotenv()
@@ -150,7 +147,6 @@ def main():
         else:
             new_df.to_csv(output_file, index=False, encoding='utf-8-sig')
             print(f"\nProcess Completed! Saved as '{output_file}'")
-
 
 if __name__ == '__main__':
     main()
