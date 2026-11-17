@@ -212,11 +212,13 @@ url = 'https://www.idefix.com/gaming-notebook-laptop-c-230881904'
 html_path = '../categories/categories'
 
 START_PAGE = 1
-END_PAGE = 100
+END_PAGE = 5
 
 get_html_pages(url, html_path, start_page=START_PAGE, end_page=END_PAGE, page_indicator='sayfa')
 
 all_links = parse_all_pages(html_path, start_page=START_PAGE, end_page=END_PAGE)
+print("Total link count: ", len(all_links))
+print("Unique link count: ", len(set(all_links)))
 
 if all_links:
   parse_product_details(all_links)
