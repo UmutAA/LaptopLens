@@ -13,8 +13,6 @@ def extract_features_batch(product_names: list[str], client: genai.Client, model
         The JSON format SHOULD have these exact keys: 
         "brand", "model", "cpu model", "ram" (number in GBs), "gpu model", "vram" (number in GBs), "storage" (number in GBs), "refresh rate" (number in Hz), "screen size" (number in inches), "OS" (Free, Windows, Linux, Mac)
         
-        If a specification is not mentioned, search for the exact model in internet and find the missing specification if can't then assign it to null.
-        
         Here is an example:
         
         Input: ASUSTUF GAMING A16 FA607NUG-RL213 RYZEN 7-7445HS 16GB DDR5 512GB 140W RTX4050 6GB 16"" 144Hz DOS"
