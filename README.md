@@ -88,12 +88,12 @@ The roadmap is ordered so that each stage builds on the previous one and produce
  
 ### Phase 1: Data Quality & Reliability
  
-- [ ] **Price parsing verification:** validate scraped prices against the website and fix Turkish number-format handling.
+- [x] **Price parsing verification:** validate scraped prices against the website and fix Turkish number-format handling.
 - [ ] **Structured output with schema validation:** enforce Gemini JSON output and validate it with `pydantic` (types, allowed ranges, required fields).
 - [ ] **Extraction accuracy evaluation:** manually label a gold-standard sample (e.g., 100-200 listings) and report per-field accuracy/precision/recall of the LLM extraction. Compare zero-shot vs. one-shot vs. few-shot quantitatively.
-- [ ] **Error handling at scale:** retries with exponential backoff, rate-limit handling, and caching of API responses to cut cost and make runs reproducible.
+- [x] **Error handling at scale:** retries with exponential backoff, rate-limit handling, and caching of API responses to cut cost and make runs reproducible.
 - [ ] **Data cleaning report:** duplicates, missing values, outliers, and inconsistent categories documented in a notebook.
-- [ ] **Responsible scraping:** respect `robots.txt`, use polite request delays, and document data-use limitations.
+- [x] **Responsible scraping:** respect `robots.txt`, use polite request delays, and document data-use limitations.
 ### Phase 2: Exploratory Data Analysis & Feature Engineering
  
 - [ ] **In-depth EDA notebook:** price distributions, brand/CPU/RAM effects, correlations, and clearly written business insights with visualizations.

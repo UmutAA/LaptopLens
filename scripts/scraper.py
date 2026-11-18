@@ -212,7 +212,7 @@ url = 'https://www.idefix.com/gaming-notebook-laptop-c-230881904'
 html_path = '../categories/categories'
 
 START_PAGE = 1
-END_PAGE = 5
+END_PAGE = 2
 
 get_html_pages(url, html_path, start_page=START_PAGE, end_page=END_PAGE, page_indicator='sayfa')
 
