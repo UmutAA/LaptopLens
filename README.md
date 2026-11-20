@@ -86,13 +86,12 @@ The first implementation used **zero-shot prompting**, which produced unstructur
  
 The roadmap is ordered so that each stage builds on the previous one and produces a tangible, demonstrable result.
  
-### Phase 1: Data Quality & Reliability
+### Phase 1: Preprocessing (Data Quality & Reliability)
  
 - [x] **Price parsing verification:** validate scraped prices against the website and fix Turkish number-format handling.
-- [ ] **Structured output with schema validation:** enforce Gemini JSON output and validate it with `pydantic` (types, allowed ranges, required fields).
-- [ ] **Extraction accuracy evaluation:** manually label a gold-standard sample (e.g., 100-200 listings) and report per-field accuracy/precision/recall of the LLM extraction. Compare zero-shot vs. one-shot vs. few-shot quantitatively.
+- [x] **Structured output with schema validation:** enforce Gemini JSON output and validate it with `pydantic` (types, allowed ranges, required fields).
 - [x] **Error handling at scale:** retries with exponential backoff, rate-limit handling, and caching of API responses to cut cost and make runs reproducible.
-- [ ] **Data cleaning report:** duplicates, missing values, outliers, and inconsistent categories documented in a notebook.
+- [x] **Data cleaning report:** duplicates, missing values, outliers, and inconsistent categories documented in a notebook.
 - [x] **Responsible scraping:** respect `robots.txt`, use polite request delays, and document data-use limitations.
 ### Phase 2: Exploratory Data Analysis & Feature Engineering
  

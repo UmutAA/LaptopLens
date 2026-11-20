@@ -15,7 +15,7 @@ class LaptopSpecs(BaseModel):
     ram_gb: int | None = Field(default=None, ge=4, le=128)
     gpu_model: str | None
     vram_gb: int | None = Field(default=None, ge=1, le=32)
-    storage_gb: int | None = Field(default=None, ge=64, le=8192)
+    storage_gb: int | None = Field(default=None, ge=64, le=16384)
     refresh_rate_hz: int | None = Field(default=None, ge=30, le=500)
     screen_size: float | None = Field(default=None, ge=10, le=20)
     os: Literal["Free", "Windows", "Linux", "Mac"] | None
@@ -60,14 +60,14 @@ class FeatureExtractor:
                     
                     Example input:
                     1. ASUSTUF GAMING A16 FA607NUG-RL213 RYZEN 7-7445HS 16GB DDR5 512GB 140W RTX4050 6GB 16" 144Hz DOS
-                    2. ASUSTUF GAMING A16 FA607NUG-RL213 RYZEN 7-7445HS 16GB DDR5 1TB 140W RTX4050 6GB 16" 144Hz DOS
-                    3. ASUSTUF GAMING A16 FA607NUG-RL213 RYZEN 7-7445HS 16GB DDR5 2TB 140W RTX4050 6GB 16" 144Hz DOS
+                    2. ASUSTUF GAMING A16 FA607NUG-RL213 RYZEN 7-7445HS 16GB DDR5 1TB 140W RTX4050 6GB 18" 144Hz DOS
+                    3. ASUSTUF GAMING A16 FA607NUG-RL213 RYZEN 7-7445HS 16GB DDR5 2TB 140W RTX4050 6GB 16" 165Hz DOS
                     
                     Example output:
                     {{"results": [
                       {{"id": 1, "brand": "ASUS", "model": "TUF GAMING A16 FA607NUG-RL213", "cpu_model": "RYZEN 7-7445HS", "ram_gb": 16, "gpu_model": "RTX4050", "vram_gb": 6, "storage_gb": 512, "refresh_rate_hz": 144, "screen_size": 16, "os": "Free"}},
-                      {{"id": 2, "brand": "ASUS", "model": "TUF GAMING A16 FA607NUG-RL213", "cpu_model": "RYZEN 7-7445HS", "ram_gb": 16, "gpu_model": "RTX4050", "vram_gb": 6, "storage_gb": 1024, "refresh_rate_hz": 144, "screen_size": 16, "os": "Free"}},
-                      {{"id": 3, "brand": "ASUS", "model": "TUF GAMING A16 FA607NUG-RL213", "cpu_model": "RYZEN 7-7445HS", "ram_gb": 16, "gpu_model": "RTX4050", "vram_gb": 6, "storage_gb": 2048, "refresh_rate_hz": 144, "screen_size": 16, "os": "Free"}}
+                      {{"id": 2, "brand": "ASUS", "model": "TUF GAMING A16 FA607NUG-RL213", "cpu_model": "RYZEN 7-7445HS", "ram_gb": 16, "gpu_model": "RTX4050", "vram_gb": 6, "storage_gb": 1024, "refresh_rate_hz": 144, "screen_size": 18, "os": "Free"}},
+                      {{"id": 3, "brand": "ASUS", "model": "TUF GAMING A16 FA607NUG-RL213", "cpu_model": "RYZEN 7-7445HS", "ram_gb": 16, "gpu_model": "RTX4050", "vram_gb": 6, "storage_gb": 2048, "refresh_rate_hz": 165, "screen_size": 16, "os": "Free"}}
                     ]}}
                     
                     Laptops:
