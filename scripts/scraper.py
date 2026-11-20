@@ -68,39 +68,6 @@ def get_html_pages(base_url, path_prefix, start_page=1, end_page=3, page_indicat
     time.sleep(0.5)
 
 def parse_all_pages(path_prefix, start_page=1, end_page=3):
-  all_item_links = []
-
-  for page in range(start_page, end_page + 1):
-    file_path = f'{path_prefix}_{page}.html'
-    print(f'\nReading {file_path}')
-    html = open_html(file_path)
-
-    if not html:
-      continue
-
-    soup = BeautifulSoup(html, 'html.parser')
-    link_elements = soup.find_all(
-        'a', class_='absolute inset-0 z-30 h-full w-full cursor-pointer'
-    )
-
-    page_links = []
-    for element in link_elements:
-      link = element.get('href')
-      if link:
-        if not link.startswith('http'):
-          full_link = 'https://www.idefix.com' + link
-        else:
-          full_link = link
-        page_links.append(full_link)
-
-    print(f'Found {len(page_links)} links in this page.')
-    all_item_links.extend(page_links)
-
-  print(f'\nTotal {len(all_item_links)} links found across all pages.')
-  return all_item_links
-
-
-def parse_all_pages(path_prefix, start_page=1, end_page=3):
     all_item_links = []
 
     for page in range(start_page, end_page + 1):
@@ -207,18 +174,18 @@ def parse_product_details(item_links):
     else:
         print('\nNo products found')
 
+if __name__ == '__main__':
+    START_PAGE = 1
+    END_PAGE = 100
 
-url = 'https://www.idefix.com/gaming-notebook-laptop-c-230881904'
-html_path = '../categories/categories'
+    url = 'https://www.idefix.com/gaming-notebook-laptop-c-230881904'
+    html_path = '../categories/categories'
 
-START_PAGE = 1
-END_PAGE = 100
+    get_html_pages(url, html_path, start_page=START_PAGE, end_page=END_PAGE, page_indicator='sayfa')
 
-get_html_pages(url, html_path, start_page=START_PAGE, end_page=END_PAGE, page_indicator='sayfa')
+    all_links = parse_all_pages(html_path, start_page=START_PAGE, end_page=END_PAGE)
+    print("Total link count: ", len(all_links))
+    print("Unique link count: ", len(set(all_links)))
 
-all_links = parse_all_pages(html_path, start_page=START_PAGE, end_page=END_PAGE)
-print("Total link count: ", len(all_links))
-print("Unique link count: ", len(set(all_links)))
-
-if all_links:
-  parse_product_details(all_links)
+    if all_links:
+      parse_product_details(all_links)
