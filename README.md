@@ -128,7 +128,7 @@ The roadmap is ordered so that each stage builds on the previous one and produce
  
 ## Results
  
-*Results will be added here as phases are completed: extraction accuracy, model metrics, feature importance plots, and demo screenshots.*
+*Results will be added here as phases are completed: model metrics, feature importance plots, and demo screenshots.*
  
 ## Disclaimer
  
