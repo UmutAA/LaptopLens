@@ -90,7 +90,7 @@ The roadmap is ordered so that each stage builds on the previous one and produce
  
 - [x] **Price parsing verification:** validate scraped prices against the website and fix Turkish number-format handling.
 - [x] **Structured output with schema validation:** enforce Gemini JSON output and validate it with `pydantic` (types, allowed ranges, required fields).
-- [x] **Error handling at scale:** retries with exponential backoff, rate-limit handling, and caching of API responses to cut cost and make runs reproducible.
+- [x] **Error handling at scale:** retries with exponential backoff, rate-limit handling.
 - [x] **Data cleaning report:** duplicates, missing values, outliers, and inconsistent categories documented in a notebook.
 - [x] **Responsible scraping:** respect `robots.txt`, use polite request delays, and document data-use limitations.
 ### Phase 2: Exploratory Data Analysis & Feature Engineering
