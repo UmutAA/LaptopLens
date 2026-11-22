@@ -50,107 +50,54 @@ def open_html(path):
     except Exception as e:
         print(e)
 
-def get_html_pages(
-    base_url,
-    path_prefix,
-    start_page=1,
-    end_page=3,
-    page_indicator="page",
-    max_requests_per_sec=2.0,
-    max_retries=5,
-    base_backoff=1.0,
-    max_backoff=60.0,
-    timeout=15.0,
-):
-    """Loops through pages with rate limiting and exponential backoff retries."""
-    min_interval = 1.0 / max_requests_per_sec if max_requests_per_sec > 0 else 0.0
-    last_request_time = None
-    retry_statuses = {429, 500, 502, 503, 504}
+def get_html_pages(base_url, path_prefix, start_page=1, end_page=3, page_indicator='page'):
+  """Loops for pages times and saves each one to a different file"""
+  for page in range(start_page, end_page + 1):
+    url = base_url + f'?{page_indicator}={page}'
+    print('Attempting to open ' + url)
+    response = requests.get(url, headers=HEADERS)
 
-    for page in range(start_page, end_page + 1):
-        sep = "&" if "?" in base_url else "?"
-        url = f"{base_url}{sep}{page_indicator}={page}"
-        response = None
+    if response.status_code != 200:
+      print('Error code: ' + str(response.status_code))
+      continue
 
-        for attempt in range(max_retries + 1):
-            # Enforce rate limit before each attempt
-            if min_interval > 0 and last_request_time is not None:
-                elapsed = time.monotonic() - last_request_time
-                if elapsed < min_interval:
-                    time.sleep(min_interval - elapsed)
-
-            print(f"Attempting to open {url} (attempt {attempt + 1}/{max_retries + 1})")
-            last_request_time = time.monotonic()
-
-            try:
-                response = requests.get(url, headers=HEADERS, timeout=timeout)
-            except requests.RequestException as exc:
-                if attempt == max_retries:
-                    print(f"Failed to fetch {url} after {max_retries + 1} attempts: {exc}")
-                    response = None
-                    break
-
-                delay = min(max_backoff, base_backoff * (2 ** attempt)) + random.uniform(0, 0.5)
-                print(f"Network error ({exc}). Backing off for {delay:.2f}s...")
-                time.sleep(delay)
-                continue
-
-            if response.status_code == 200:
-                break
-
-            if response.status_code in retry_statuses and attempt < max_retries:
-                retry_after = response.headers.get("Retry-After")
-                if retry_after and retry_after.isdigit():
-                    delay = min(max_backoff, float(retry_after))
-                else:
-                    delay = min(max_backoff, base_backoff * (2 ** attempt)) + random.uniform(0, 0.5)
-
-                print(
-                    f"Received status {response.status_code} for {url}. "
-                    f"Backing off for {delay:.2f}s..."
-                )
-                time.sleep(delay)
-                continue
-
-            print(f"Error code: {response.status_code} for {url}")
-            break
-
-        if response is None or response.status_code != 200:
-            continue
-
-        print(f"Successfully opened {url}")
-        file_path = f"{path_prefix}_{page}.html"
-        print(f"Saving HTML to {file_path}")
-        save_html(response.text, file_path)
+    print('Successfully opened ' + url)
+    file_path = f'{path_prefix}_{page}.html'
+    print('Saving HTML to ' + file_path)
+    save_html(response.text, file_path)
+    time.sleep(0.5)
 
 def parse_all_pages(path_prefix, start_page=1, end_page=3):
-    all_item_links = []
+  all_item_links = []
 
-    for page in range(start_page, end_page + 1):
-        file_path = f'{path_prefix}_{page}.html'
-        print(f'\nReading {file_path}...')
-        html = open_html(file_path)
+  for page in range(start_page, end_page + 1):
+    file_path = f'{path_prefix}_{page}.html'
+    print(f'\nReading {file_path}')
+    html = open_html(file_path)
 
-        if not html:
-            continue
+    if not html:
+      continue
 
-        soup = BeautifulSoup(html, 'html.parser')
-        link_elements = soup.find_all(
-            'a', class_='absolute inset-0 z-30 h-full w-full cursor-pointer'
-        )
+    soup = BeautifulSoup(html, 'html.parser')
+    link_elements = soup.find_all(
+        'a', class_='absolute inset-0 z-30 h-full w-full cursor-pointer'
+    )
 
-        page_links = []
-        for element in link_elements:
-            link = element.get('href')
-            if link:
-                full_link = link if link.startswith('http') else 'https://www.idefix.com' + link
-                page_links.append(full_link)
+    page_links = []
+    for element in link_elements:
+      link = element.get('href')
+      if link:
+        if not link.startswith('http'):
+          full_link = 'https://www.idefix.com' + link
+        else:
+          full_link = link
+        page_links.append(full_link)
 
-        print(f'Found {len(page_links)} links in this page.')
-        all_item_links.extend(page_links)
+    print(f'Found {len(page_links)} links in this page.')
+    all_item_links.extend(page_links)
 
-    print(f'\nTotal {len(all_item_links)} links found across all pages.')
-    return all_item_links
+  print(f'\nTotal {len(all_item_links)} links found across all pages.')
+  return all_item_links
 
 def parse_product_details(item_links):
     items = []
@@ -230,18 +177,18 @@ def parse_product_details(item_links):
     else:
         print('\nNo products found')
 
-if __name__ == '__main__':
-    START_PAGE = 1
-    END_PAGE = 100
 
-    url = 'https://www.idefix.com/gaming-notebook-laptop-c-230881904'
-    html_path = '../categories/categories'
+url = 'https://www.idefix.com/gaming-notebook-laptop-c-230881904'
+html_path = '../categories/categories'
 
-    get_html_pages(url, html_path, start_page=START_PAGE, end_page=END_PAGE, page_indicator='sayfa')
+START_PAGE = 1
+END_PAGE = 100
 
-    all_links = parse_all_pages(html_path, start_page=START_PAGE, end_page=END_PAGE)
-    print("Total link count: ", len(all_links))
-    print("Unique link count: ", len(set(all_links)))
+get_html_pages(url, html_path, start_page=START_PAGE, end_page=END_PAGE, page_indicator='sayfa')
 
-    if all_links:
-      parse_product_details(all_links)
+all_links = parse_all_pages(html_path, start_page=START_PAGE, end_page=END_PAGE)
+print("Total link count: ", len(all_links))
+print("Unique link count: ", len(set(all_links)))
+
+if all_links:
+  parse_product_details(all_links)
