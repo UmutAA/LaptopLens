@@ -120,6 +120,7 @@ The roadmap is ordered so that each stage builds on the previous one and produce
 - [ ] **Baselines first:** Linear/Ridge Regression as a reference point.
 - [ ] **Tree-based models:** Random Forest, XGBoost / LightGBM with cross-validation and hyperparameter tuning (Optuna or GridSearchCV).
 - [ ] **Proper evaluation:** MAE, RMSE, MAPE, R² with a held-out test set (grouped split by `group_id`); avoid data leakage via scikit-learn `Pipeline`s.
+- [ ] **Ablation study:** drop (or add back) one feature group at a time (GPU, CPU, RAM/storage, brand, OS, screen/refresh rate) and measure the change in grouped-CV MAE and R², to show which features actually carry the signal. Complements SHAP, which explains a single trained model.
 - [ ] **Explainability:** SHAP values to show *why* the model predicts a given price and which specs matter most.
 - [ ] **Error analysis:** investigate where the model fails (rare brands, extreme prices) and discuss limitations honestly.
 
